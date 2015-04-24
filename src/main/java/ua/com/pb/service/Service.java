@@ -1,9 +1,10 @@
 package ua.com.pb.service;
 
 import ua.com.pb.input.Input;
+import ua.com.pb.jobject.JarCoincidence;
 import ua.com.pb.jobject.JarObject;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -12,35 +13,82 @@ import java.util.jar.JarFile;
  * Created by Baelousov Artur Igorevich. E-mail: g.infosecurity@gmail.com on 23.04.15.
  */
 public class Service {
-    Map<String, String> map = new HashMap<String, String>();
 
 
     public void doany(String path) throws IOException {
         JarObject[] jObjs = getJarObjects(path);
-        compareJarss(jObjs);
+        JarCoincidence[] jarCoincs = compareJarss(jObjs);
+        print(jarCoincs);
+    }
+
+    private void print(JarCoincidence[] jarCoincs) throws IOException {
+
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("/tmp/filename.html"), "utf-8"))) {
+
+            writer.write("<!DOCTYPE html>");
+            writer.write("<head>");
+            writer.write("<meta charset=\"utf-8\">");
+            writer.write("</head>");
+            writer.write("<body>");
+            writer.write("<table width=\"80%\" align=center border=\"1\">");
 
 
-        System.out.println("---------------------------------------------------");
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            System.out.println(entry.getKey() + "  |   " + entry.getValue());
+            for (JarCoincidence j : jarCoincs) {
+                writer.write("<tr>");
+                writer.write("<td align=center><h3>");
+                writer.write(j.getJarName_fst());
+                writer.write("</h3></td>");
+                writer.write("<td align=center><h3>");
+                writer.write(j.getJarName_scnd());
+                writer.write("</h3></td>");
+                writer.write("</tr>");
+
+
+                writer.write("<tr>");
+                writer.write("<td colspan=\"2\">");
+                for (String s : j.getCoincidencesClasses()) {
+                    writer.write("<table width=\"50%\" align=center>");
+                    writer.write("<tr>");
+                    writer.write("<td>");
+                    writer.write(s);
+                    writer.write("</td>");
+                    writer.write("</tr>");
+                    writer.write("</table>");
+                }
+                writer.write("</td>");
+                writer.write("</tr>");
+            }
+
+
+            writer.write("</table>");
+            writer.write("</body>");
+            writer.write("</html>");
         }
-//
-//        System.out.println(map.size());
     }
 
 
-    public void compareJarss(JarObject[] jObj) {
+    public JarCoincidence[] compareJarss(JarObject[] jObj) {
+        ArrayList<JarCoincidence> jarCoincsList = new ArrayList<JarCoincidence>();
+        JarCoincidence jarCoin;
         for (int i = 0; i < jObj.length; i++) {
             for (int j = 0; j < jObj.length; j++) {
                 if (!jObj[i].getJarName().equals(jObj[j].getJarName())) {
-                    compareClasses(jObj[i], jObj[j]);
+                    String[] tmp = compareClasses(jObj[i], jObj[j]);
+                    if (tmp.length != 0) {
+                        jarCoin = new JarCoincidence();
+                        jarCoin.setCoincidencesClasses(tmp);
+                        jarCoin.setJarName_fst(jObj[i].getJarName());
+                        jarCoin.setJarName_scnd(jObj[j].getJarName());
+                        jarCoincsList.add(jarCoin);
+                    }
+
                 }
             }
         }
+        return jarCoincsList.toArray(new JarCoincidence[jarCoincsList.size()]);
     }
 
-    private void compareClasses(JarObject jObj_i, JarObject jObj_j) {
-        boolean flag = false;
+    private String[] compareClasses(JarObject jObj_i, JarObject jObj_j) {
         ArrayList<String> coincidence = new ArrayList<String>();
         String[] i_cl = jObj_i.getClasses();
         String[] j_cl = jObj_j.getClasses();
@@ -49,19 +97,11 @@ public class Service {
             for (int j = 0; j < j_cl.length; j++) {
                 if (i_cl[i].equals(j_cl[j])) {
                     coincidence.add(i_cl[i]);
-                    flag = true;
                 }
             }
         }
 
-        if (flag) {
-            System.out.println(jObj_i.getJarName() + "    |    " + jObj_j.getJarName());
-
-            if (jObj_i.getJarName().equals(map.get(jObj_j.getJarName()))){
-                map.put(jObj_i.getJarName(), jObj_j.getJarName());
-            }
-        }
-
+        return coincidence.toArray(new String[coincidence.size()]);
     }
 
 
@@ -102,7 +142,7 @@ public class Service {
             classes.add(classPath);
             List<String> jarNames = map.get(je.getName());
             if (jarNames == null) {
-                jarNames = new ArrayList<String>();
+                jarNames = new ArrayList<>();
                 map.put(classPath, jarNames);
             }
             jarNames.add(jarFile.getName());

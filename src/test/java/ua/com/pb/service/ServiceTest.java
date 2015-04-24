@@ -21,7 +21,7 @@ public class ServiceTest {
 //        String pathToJar = "/tmp/lib/activation-1.1.jar";
 //        JarFile jf = new JarFile(pathToJar);
 //        JarObject jarObject = service.getJarInfo(jf, new HashMap<String, List<String>>());
-//        assertEquals(jarObject.getJarName(), pathToJar);
+//        assertEquals(jarObject.getJarName_fst(), pathToJar);
 //    }
 
 
