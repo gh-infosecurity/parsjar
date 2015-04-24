@@ -16,13 +16,13 @@ import static org.junit.Assert.*;
 public class ServiceTest {
     Service service = new Service();
 
-//    @Test
-//    public void testGetJarInfo() throws Exception {
-//        String pathToJar = "/tmp/lib/activation-1.1.jar";
-//        JarFile jf = new JarFile(pathToJar);
-//        JarObject jarObject = service.getJarInfo(jf, new HashMap<String, List<String>>());
-//        assertEquals(jarObject.getJarName_fst(), pathToJar);
-//    }
+    @Test
+    public void testGetJarInfo() throws Exception {
+        String pathToJar = "/tmp/lib/activation-1.1.jar";
+        JarFile jf = new JarFile(pathToJar);
+        JarObject jarObject = service.getJarInfo(jf, new HashMap<String, List<String>>());
+        assertEquals(jarObject.getJarName(), pathToJar);
+    }
 
 
     @Test

@@ -23,7 +23,7 @@ public class Service {
 
     private void print(JarCoincidence[] jarCoincs) throws IOException {
 
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("/tmp/filename.html"), "utf-8"))) {
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("/tmp/index.html"), "utf-8"))) {
 
             writer.write("<!DOCTYPE html>");
             writer.write("<head>");
@@ -68,7 +68,7 @@ public class Service {
 
 
     public JarCoincidence[] compareJarss(JarObject[] jObj) {
-        ArrayList<JarCoincidence> jarCoincsList = new ArrayList<JarCoincidence>();
+        ArrayList<JarCoincidence> jarCoincsList = new ArrayList<>();
         JarCoincidence jarCoin;
         for (int i = 0; i < jObj.length; i++) {
             for (int j = 0; j < jObj.length; j++) {
@@ -89,7 +89,7 @@ public class Service {
     }
 
     private String[] compareClasses(JarObject jObj_i, JarObject jObj_j) {
-        ArrayList<String> coincidence = new ArrayList<String>();
+        ArrayList<String> coincidence = new ArrayList<>();
         String[] i_cl = jObj_i.getClasses();
         String[] j_cl = jObj_j.getClasses();
 
