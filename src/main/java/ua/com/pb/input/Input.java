@@ -32,7 +32,6 @@ public class Input {
             } else {
                 if (identJarType(fileEntry.getAbsolutePath()))
                     jarFiles.add(new JarFile(fileEntry.getAbsolutePath()));
-
             }
         }
         return jarFiles;
