@@ -32,7 +32,6 @@ public class Service {
             writer.write("<body>");
             writer.write("<table width=\"80%\" align=center border=\"1\">");
 
-
             for (JarCoincidence j : jarCoincs) {
                 writer.write("<tr>");
                 writer.write("<td align=center><h3>");
@@ -42,7 +41,6 @@ public class Service {
                 writer.write(j.getJarName_scnd());
                 writer.write("</h3></td>");
                 writer.write("</tr>");
-
 
                 writer.write("<tr>");
                 writer.write("<td colspan=\"2\">");
@@ -59,7 +57,6 @@ public class Service {
                 writer.write("</tr>");
             }
 
-
             writer.write("</table>");
             writer.write("</body>");
             writer.write("</html>");
@@ -69,23 +66,26 @@ public class Service {
 
     public JarCoincidence[] compareJarss(JarObject[] jObj) {
         ArrayList<JarCoincidence> jarCoincsList = new ArrayList<>();
-        JarCoincidence jarCoin;
+
         for (int i = 0; i < jObj.length; i++) {
             for (int j = 0; j < jObj.length; j++) {
                 if (!jObj[i].getJarName().equals(jObj[j].getJarName())) {
                     String[] tmp = compareClasses(jObj[i], jObj[j]);
-                    if (tmp.length != 0) {
-                        jarCoin = new JarCoincidence();
-                        jarCoin.setCoincidencesClasses(tmp);
-                        jarCoin.setJarName_fst(jObj[i].getJarName());
-                        jarCoin.setJarName_scnd(jObj[j].getJarName());
-                        jarCoincsList.add(jarCoin);
-                    }
-
+                    if (tmp.length != 0)
+                        jarCoincsList.add(fillJarConcidence(tmp, jObj, i, j));
                 }
             }
         }
         return jarCoincsList.toArray(new JarCoincidence[jarCoincsList.size()]);
+    }
+
+    private JarCoincidence fillJarConcidence(String[] tmp, JarObject[] jObj, int i, int j) {
+        JarCoincidence jarCoin = new JarCoincidence();
+        jarCoin.setCoincidencesClasses(tmp);
+        jarCoin.setJarName_fst(jObj[i].getJarName());
+        jarCoin.setJarName_scnd(jObj[j].getJarName());
+
+        return jarCoin;
     }
 
     private String[] compareClasses(JarObject jObj_i, JarObject jObj_j) {
@@ -100,7 +100,6 @@ public class Service {
                 }
             }
         }
-
         return coincidence.toArray(new String[coincidence.size()]);
     }
 
@@ -110,7 +109,7 @@ public class Service {
         Input input = new Input();
         ArrayList<JarFile> jFiles = input.getfiles(path);
         ArrayList<JarObject> jObjects = new ArrayList<JarObject>();
-        Map<String, List<String>> map = new HashMap<String, List<String>>(jFiles.size());
+        Map<String, List<String>> map = new HashMap<>(jFiles.size());
         for (JarFile jf : jFiles) {
             jObj = getJarInfo(jf, map);
             if (jObj != null)
@@ -130,7 +129,7 @@ public class Service {
 
     public JarObject getJarInfo(JarFile jarFile, Map<String, List<String>> map) {
         JarObject jObj = null;
-        ArrayList<String> classes = new ArrayList<String>();
+        ArrayList<String> classes = new ArrayList<>();
         Enumeration e = jarFile.entries();
 
         while (e.hasMoreElements()) {
@@ -146,7 +145,6 @@ public class Service {
                 map.put(classPath, jarNames);
             }
             jarNames.add(jarFile.getName());
-
         }
 
         if (!classes.isEmpty()) {
@@ -154,7 +152,6 @@ public class Service {
             jObj.setJarName(jarFile.getName());
             jObj.setClasses(classes.toArray(new String[classes.size()]));
         }
-
         return jObj;
     }
 }
