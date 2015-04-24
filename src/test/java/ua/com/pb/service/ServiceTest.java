@@ -31,7 +31,6 @@ public class ServiceTest {
 
 
     @Test
-    @Ignore
     public void doany() throws Exception {
         String pathToJar = "/tmp/lib/";
         service.doany(pathToJar);

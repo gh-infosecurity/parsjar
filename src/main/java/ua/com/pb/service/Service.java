@@ -13,6 +13,7 @@ import java.util.jar.JarFile;
  * Created by Baelousov Artur Igorevich. E-mail: g.infosecurity@gmail.com on 23.04.15.
  */
 public class Service {
+    Map<String, List<String>> map;
 
 
     public void doany(String path) throws IOException {
@@ -55,6 +56,26 @@ public class Service {
                 }
                 writer.write("</td>");
                 writer.write("</tr>");
+            }
+
+
+            writer.write("<tr>" +
+                    "<td colspan=\"2\" align=center>" +
+                    "<h2>Second Variant:</h2></td>" +
+                    "</tr>");
+
+            for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+                List<String> jarNames = entry.getValue();
+                if (jarNames != null && jarNames.size() > 1) {
+                    writer.write("<tr>");
+                    writer.write("<td>");
+                    writer.write(entry.getKey());
+                    writer.write("</td>");
+                    writer.write("<td>");
+                    writer.write(String.valueOf(entry.getValue()));
+                    writer.write("</td>");
+                    writer.write("</tr>");
+                }
             }
 
             writer.write("</table>");
@@ -107,22 +128,16 @@ public class Service {
     public JarObject[] getJarObjects(String path) throws IOException {
         JarObject jObj;
         Input input = new Input();
+        ArrayList<JarObject> jObjects = new ArrayList<>();
         ArrayList<JarFile> jFiles = input.getfiles(path);
-        ArrayList<JarObject> jObjects = new ArrayList<JarObject>();
         Map<String, List<String>> map = new HashMap<>(jFiles.size());
+
         for (JarFile jf : jFiles) {
             jObj = getJarInfo(jf, map);
             if (jObj != null)
                 jObjects.add(jObj);
         }
-        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-            List<String> jarNames = entry.getValue();
-            if (jarNames != null && jarNames.size() > 1) {
-                System.out.println(entry.getKey() + "->" + entry.getValue());
-            }
-        }
-        System.out.println(map);
-        System.out.println("\n\n\n\n\n===========================================");
+        this.map = map;
         return jObjects.toArray(new JarObject[jObjects.size()]);
     }
 
@@ -145,6 +160,7 @@ public class Service {
                 map.put(classPath, jarNames);
             }
             jarNames.add(jarFile.getName());
+
         }
 
         if (!classes.isEmpty()) {

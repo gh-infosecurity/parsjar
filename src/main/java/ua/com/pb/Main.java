@@ -11,7 +11,8 @@ public class Main {
     public static void main(String[] args) {
         Service service = new Service();
         try {
-            service.doany(args[0]);
+            if(args.length!=0)
+                service.doany(args[0]);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
