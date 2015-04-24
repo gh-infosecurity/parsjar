@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+    <profiles>
+        <profile>
+            <id>compiler</id>
+            <properties>
+                <JAVA_1_7_HOME>/usr/lib/jvm/jdk1.7.0_40</JAVA_1_7_HOME>
+            </properties>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>compiler</activeProfile>
+    </activeProfiles>
+</settings>
