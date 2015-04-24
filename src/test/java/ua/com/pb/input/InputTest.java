@@ -31,9 +31,11 @@ public class InputTest {
 
     @Test
     public void testGetfiles_Any() throws IOException {
+        File dir = new File("/tmp/empty");
+        dir.mkdir();
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Directory contains any *.jar file");
-        input.getfiles("/tmp/");
+        input.getfiles(dir.getPath());
     }
 
     @Test

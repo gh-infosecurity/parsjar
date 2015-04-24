@@ -115,14 +115,14 @@ public class Service {
             if (jObj != null)
                 jObjects.add(jObj);
         }
-//        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-//            List<String> jarNames = entry.getValue();
-//            if (jarNames != null && jarNames.size() > 1) {
-//                System.out.println(entry.getKey() + "->" + entry.getValue());
-//            }
-//        }
-//        System.out.println(map);
-//        System.out.println("\n\n\n\n\n===========================================");
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            List<String> jarNames = entry.getValue();
+            if (jarNames != null && jarNames.size() > 1) {
+                System.out.println(entry.getKey() + "->" + entry.getValue());
+            }
+        }
+        System.out.println(map);
+        System.out.println("\n\n\n\n\n===========================================");
         return jObjects.toArray(new JarObject[jObjects.size()]);
     }
 
